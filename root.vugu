@@ -1,0 +1,49 @@
+<div>
+    <main role="main" class="flex flex-col min-h-screen w-screen items-center justify-center bg-gray-100">
+        <h1 class="text-4xl font-serif mb-10">Simple Todo APP</h1>
+        <form @submit='event.PreventDefault();c.HandleSubmit()'>
+            <vgform:Input type="text" class="border-gray-300 focus:border-teal-300 rounded-lg py-2 px-4 border-2 rounded-r-none"
+            :Value='vgform.StringPtr{&c.NewToDo}' placeholder="New Todo"
+            ></vgform:Input>
+            <button
+            class=" text-center text-white font-bold rounded rounded-l-none py-2 px-4 -ml-2 border-2 bg-green-700 border-green-700"
+            >
+            Add
+          </button>
+        </form>
+        <div vg-if='len(c.Todos) > 0' class="flex items-center justify-center flex-col mt-5 w-full max-w-sm">
+            <div class="border-b mb-12 mt-3">
+                <h2 class="text-2xl font-serif text-grey-800 font-light italic"> Your Todo </h2>
+            </div>
+            <div vg-for='key, item := range c.Todos' class="w-full">
+                <div class="flex justify-between w-full p-3 bg-white rounded border-gray-300 border">
+                    <div class="text-grey-800" vg-content="item"></div>
+                    <button @click='c.deleteTodos(event)' class="flex items-center justify-center text-gray-800 w-6 h-6" :value='key'>X</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script type="application/x-go">
+import "github.com/vugu/vugu/vgform"
+import "log"
+import "strconv"
+
+type Root struct {
+    NewToDo string
+    Todos []string
+}
+
+func (c *Root) HandleSubmit() {
+    c.Todos = append(c.Todos, c.NewToDo)
+    c.NewToDo = ""
+}
+
+func (c *Root) deleteTodos(event vugu.DOMEvent) {
+    index, _ := strconv.ParseInt(event.PropString("target", "value"), 0, 64)
+    log.Print(index)
+    c.Todos = append(c.Todos[:index], c.Todos[index+1:]...)
+}  
+</script>
