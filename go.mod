@@ -1,4 +1,4 @@
-module github.com/vugu-examples/simple
+module github.com/wishperhope/todo-app-fugu
 
 go 1.14
 
